@@ -1,0 +1,27 @@
+{
+  "name": "napchart-website",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npm run build:dev:watch && nodemon --watch server server/server",
+    "prod": "npm run build:prod & node server/server",
+    "build:prod": "NODE_ENV=production webpack",
+    "build:dev:watch": "webpack --watch",
+    "build-favicon": "real-favicon generate favicon/faviconDescription.json favicon/faviconData.json favicon/generated",
+    "update-favicon": "real-favicon check-for-update --fail-on-update favicon/faviconData.json"
+  },
+  "dependencies": {
+    "canvas": "^1.6.12"
+  },
+  "devDependencies": {
+  },
+  "description": "Napchart Website",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larskarbo/napchart-website.git"
+  },
+  "author": "Lars Karbo",
+  "bugs": {
+    "url": "https://github.com/larskarbo/napchart-website/issues"
+  }
+}
