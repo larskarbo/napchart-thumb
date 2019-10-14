@@ -7,7 +7,7 @@ var getImage = require('./getImage')
 
 app.get('/api/getImage', getImage)
 
-var port = process.env.PORT || 80
+var port = process.env.PORT || 1771
 
 app.listen(port, "0.0.0.0", function () {
   console.log(`listening at ${port}`)
