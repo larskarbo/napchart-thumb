@@ -2,13 +2,13 @@ var Napchart = require("napchart");
 var Parse = require("parse/node");
 // const { createCanvas, registerFont } = require('canvas')
 
-// Parse.initialize(
-//   "osxjLrTMW7cJ6r6IPOpDYXyuBzBRSzQTaNeza7O6",
-//   "rijTlVRNfqPPV2X9MLnRAP1UDzQbz7UTRjfCOaQ6"
-// );
-// Parse.serverURL = 'https://pg-app-57gagyy9xq3pta5kvgpzs2dh6gv7w5.scalabl.cloud/1/';
-Parse.initialize("napchart");
-Parse.serverURL = "http://localhost:1337/1/";
+Parse.initialize(
+  "osxjLrTMW7cJ6r6IPOpDYXyuBzBRSzQTaNeza7O6",
+  "rijTlVRNfqPPV2X9MLnRAP1UDzQbz7UTRjfCOaQ6"
+);
+Parse.serverURL = 'https://pg-app-57gagyy9xq3pta5kvgpzs2dh6gv7w5.scalabl.cloud/1/';
+// Parse.initialize("napchart");
+// Parse.serverURL = "http://localhost:1337/1/";
 
 // var Canvas = require("canvas"),
 //   Image = Canvas.Image,
