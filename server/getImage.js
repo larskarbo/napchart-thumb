@@ -1,19 +1,21 @@
-var database = require("./database/database");
 var Napchart = require("napchart");
 var Parse = require("parse/node");
 // const { createCanvas, registerFont } = require('canvas')
 
-Parse.initialize(
-  "OSJ8w3oiFSPTFTuY3f6E6C70TMiHJNVOCLQErM67",
-  "qbv0Wqk2htSWiJRZiZy42MHaJMCCSTLhMrSiHQQ7"
-);
-Parse.serverURL =
-  "https://pg-app-ceeyhg3pmff1ff3x1wu4dzhxfddts7.scalabl.cloud/1/";
+// Parse.initialize(
+//   "osxjLrTMW7cJ6r6IPOpDYXyuBzBRSzQTaNeza7O6",
+//   "rijTlVRNfqPPV2X9MLnRAP1UDzQbz7UTRjfCOaQ6"
+// );
+// Parse.serverURL = 'https://pg-app-57gagyy9xq3pta5kvgpzs2dh6gv7w5.scalabl.cloud/1/';
+Parse.initialize("napchart");
+Parse.serverURL = "http://localhost:1337/1/";
 
-var Canvas = require("canvas"),
-  Image = Canvas.Image,
-  canvas = new Canvas(200, 200),
-  ctx = canvas.getContext("2d");
+// var Canvas = require("canvas"),
+//   Image = Canvas.Image,
+//   canvas = new Canvas(200, 200),
+//   ctx = canvas.getContext("2d");
+
+const { createCanvas, loadImage } = require("canvas");
 
 module.exports = function(req, res) {
   var chartid = req.query.chartid;
@@ -30,9 +32,8 @@ module.exports = function(req, res) {
   }
 
   // registerFont('server/Consolas.ttf', {family: 'Consolas'})
-
-  var canvas = new Canvas(width, height); //createCanvas(width, height)
-  var ctx = canvas.getContext("2d");
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
 
   const Chart = Parse.Object.extend("Chart");
   const query = new Parse.Query(Chart);
@@ -49,31 +50,39 @@ module.exports = function(req, res) {
           title: chart.get("title"),
           description: chart.get("description")
         },
-        ...chart.get("chartData")
+        ...chart.get("chartData"),
       };
 
-      if (typeof shape == "undefined") {
-        shape = chart.chartData.shape;
+      if (typeof shape != "undefined") {
+        data.shape = shape
       }
 
-      var chartData = {
-        elements: chart.chartData.elements,
-        colorTags: chart.chartData.colorTags,
-        lanes: chart.chartData.lanes,
-        shape
-      };
 
-      var mynapchart = Napchart.init(ctx, chartData, {
+
+      var mynapchart = Napchart.init(ctx, data, {
         interaction: false,
         font: "Consolas",
         background: "white",
         baseFontSize: "noscale:1.5"
       });
 
+      // Write "Awesome!"
+      ctx.font = "30px Impact";
+      ctx.rotate(0.1);
+      ctx.fillText("Awesome!", 50, 100);
+
+      // Draw line under text
+      var text = ctx.measureText("Awesome!");
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.beginPath();
+      ctx.lineTo(50, 102);
+      ctx.lineTo(50 + text.width, 102);
+      ctx.stroke();
+
       canvas.pngStream().pipe(res);
     })
     .catch(err => {
+      console.log('err: ', err);
       return res.status(404).send("404");
     });
-
 };
