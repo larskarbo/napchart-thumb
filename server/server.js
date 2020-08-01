@@ -26,7 +26,7 @@ firebase.initializeApp(firebaseConfig);
 app.use(bodyParser.json());
 app.get("/api/getImage", getImage);
 
-app.post("/api/create", function (req, res) {
+app.post("/api/create", async function (req, res) {
   console.log(req.body.data);
   var db = firebase.firestore();
   var data = JSON.parse(req.body.data);
@@ -64,7 +64,7 @@ app.post("/api/create", function (req, res) {
     return id
   }
 
-  const chartid = getUniqueChartId().then((chartid) => {
+  const chartid = await getUniqueChartId().then((chartid) => {
     console.error('generated unique id')
     console.error(chartid)
     return db
