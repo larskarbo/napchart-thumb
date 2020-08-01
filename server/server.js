@@ -73,14 +73,12 @@ app.post("/api/create", async function (req, res) {
       .set(dataForServer)
       .then((docRef) => {
         
-        res.send(chartid)
+        res.send({chartid})
         console.log('chartid: ', chartid);
       })
 
 
   })
-
-  console.log('chartid: ', chartid);
 
 
 });
