@@ -64,7 +64,7 @@ app.post("/api/create", async function (req, res) {
     return id
   }
 
-  const chartid = await getUniqueChartId().then((chartid) => {
+  getUniqueChartId().then((chartid) => {
     console.error('generated unique id')
     console.error(chartid)
     return db
@@ -72,13 +72,14 @@ app.post("/api/create", async function (req, res) {
       .doc(chartid)
       .set(dataForServer)
       .then((docRef) => {
-        return chartid
+        
+        res.send(chartid)
+        console.log('chartid: ', chartid);
       })
 
 
   })
 
-  res.send(chartid)
   console.log('chartid: ', chartid);
 
 
