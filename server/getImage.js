@@ -1,11 +1,10 @@
 var Napchart = require("napchart");
 
-var firebase = require("firebase/app");
 
 const { createCanvas, loadImage } = require("canvas");
+const { request } = require("./request");
 
 module.exports = async function(req, res) {
-  var db = firebase.firestore();
   var chartid = req.query.chartid;
   var width = req.query.width * 1; // * 1 to ensure they are numbers not strings
   var height = req.query.height * 1;
@@ -23,24 +22,14 @@ module.exports = async function(req, res) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  const data = await db
-  .collection('charts')
-  .doc(chartid)
-  .get()
-  .then((snapshot) => {
-    const result = snapshot.data()
-    if (result === undefined) {
-      console.log('Chart with ID ' + chartid + ' not found.')
-      return
-    }
-    return result
-  })
+  const data = await request("GET", "/getChart/" + chartid)
+  
 
   if (typeof shape != "undefined") {
-    data.shape = shape
+    data.chartData.shape = shape
   }
 
-  var mynapchart = Napchart.init(ctx, data, {
+  var mynapchart = Napchart.init(ctx, data.chartData, {
     interaction: false,
     font: "Consolas",
     background: "white",

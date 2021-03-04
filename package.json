@@ -11,13 +11,12 @@
     "update-favicon": "real-favicon check-for-update --fail-on-update favicon/faviconData.json"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.0",
     "express": "^4.17.1",
-    "firebase": "^7.17.1",
     "napchart": "^3.0.9"
   },
-  "devDependencies": {},
   "description": "Napchart Website",
   "repository": {
     "type": "git",
