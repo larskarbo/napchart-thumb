@@ -20,7 +20,7 @@ app.get("/api/getImage", getImage);
 app.post("/alt/api/create", async function (req, res) {
   var data = req.body
 
-  request('POST', '/createChart', {
+  request('POST', '/createSnapshot', {
     chartData: data.chartData,
     title: data.metaInfo.title,
     description: data.metaInfo.description,
@@ -35,6 +35,9 @@ app.post("/alt/api/create", async function (req, res) {
     })
     .catch((err) => {
       console.error("things didn't work... " + err)
+      if(err.response){
+        return res.send(err.response.status, err.message)
+      }
       res.send(500)
     })
 });

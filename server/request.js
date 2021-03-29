@@ -12,11 +12,4 @@ module.exports.request = function request(method, functionName, data) {
     data: data,
     withCredentials: true,
   }).then((res) => res.data)
-  // return ky(BASE + functionName, {
-  //   method: method,
-  //   json: data,
-  //   headers,
-  //   credentials: "include",
-  //   mode: "cors"
-  // }).json()
 }
