@@ -1,40 +1,46 @@
-var Napchart = require("napchart");
+const puppeteer = require("puppeteer");
+const sharp = require("sharp");
 
+let page = false;
+(async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const pageHere = await browser.newPage();
+  await pageHere.setViewport({
+    width: 1500,
+    height: 800,
+    deviceScaleFactor: 2,
+  });
+  await pageHere.goto(`https://napchart.com/app`);
+  console.log("Pupp is ready");
+  page = pageHere;
+})();
 
-const { createCanvas, loadImage } = require("canvas");
-const { request } = require("./request");
-
-module.exports = async function(req, res) {
+module.exports = async function (req, res) {
   var chartid = req.query.chartid;
-  var width = req.query.width * 1; // * 1 to ensure they are numbers not strings
-  var height = req.query.height * 1;
-  var shape = req.query.shape;
 
-  if (
-    typeof chartid == "undefined" ||
-    typeof width == "undefined" ||
-    typeof height == "undefined"
-  ) {
+  if (typeof chartid == "undefined") {
     return res.send("Invalid request");
   }
 
-  // registerFont('server/Consolas.ttf', {family: 'Consolas'})
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-
-  const data = await request("GET", "/getChart/" + chartid)
-  
-
-  if (typeof shape != "undefined") {
-    data.chartData.shape = shape
+  if (!page) {
+    return res.send(500);
   }
 
-  var mynapchart = Napchart.init(ctx, data.chartData, {
-    interaction: false,
-    font: "Consolas",
-    background: "white",
-    baseFontSize: "noscale:1.5"
-  });
+  (async () => {
+    await page.goto(`https://napchart.com/${chartid}`);
+    await page.waitForSelector("canvas"); // wait for the selector to load
+    const element = await page.$("canvas"); // declare a variable with an ElementHandle
+    await element.screenshot({ path: __dirname + "chart.png" });
 
-  canvas.pngStream().pipe(res);
+    // await browser.close();
+    sharp(__dirname + "chart.png")
+      .resize(600, 600, {
+        fit: 'cover',
+        // position: 'right top',
+      })
+      .toFile(__dirname + "chartcropped.png")
+      .then((data) => {
+        res.sendFile(__dirname + "chartcropped.png");
+      });
+  })();
 };
