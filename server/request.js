@@ -1,9 +1,9 @@
-const axios = require('axios')
+const axios = require("axios");
 
-const BASE = `https://api.napchart.com`
+const isDev = process.env.NODE_ENV == "development";
+const BASE = isDev ? `http://localhost:3200` : `https://api.napchart.com`;
 
-let headers = {}
-
+let headers = {};
 
 module.exports.request = function request(method, functionName, data) {
   return axios({
@@ -11,5 +11,5 @@ module.exports.request = function request(method, functionName, data) {
     method: method,
     data: data,
     withCredentials: true,
-  }).then((res) => res.data)
-}
+  }).then((res) => res.data);
+};

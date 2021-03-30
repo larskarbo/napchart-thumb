@@ -1,7 +1,13 @@
 const puppeteer = require("puppeteer");
 const sharp = require("sharp");
+const { request } = require("./request");
+
+const isDev = process.env.NODE_ENV == 'development'
+const WEB_BASE = isDev ? `http://localhost:8000` : `https://napchart.com`
+console.log('WEB_BASE: ', WEB_BASE);
 
 let page = false;
+let element = false;
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const pageHere = await browser.newPage();
@@ -10,14 +16,13 @@ let page = false;
     height: 1500,
     deviceScaleFactor: 2,
   });
-  await pageHere.goto(`https://napchart.com/app`);
+  await pageHere.goto(`${WEB_BASE}/app`);
+  await pageHere.waitForSelector("canvas"); // wait for the selector to load
+  const elementHere = await pageHere.$("canvas"); // declare a variable with an ElementHandle
+  element = elementHere
   console.log("Pupp is ready");
   page = pageHere;
 })();
-
-const isDev = process.env.NODE_ENV == 'development'
-const WEB_BASE = isDev ? `http://localhost:8000` : `https://napchart.com`
-console.log('WEB_BASE: ', WEB_BASE);
 
 module.exports = async function (req, res) {
   var chartid = req.query.chartid;
@@ -32,11 +37,12 @@ module.exports = async function (req, res) {
   }
 
   // const size = hr ? 2400 : 600
+  const data = await request("GET", "/getChart/" + chartid);
 
   (async () => {
-    await page.goto(`${WEB_BASE}/random/${chartid}`);
-    await page.waitForSelector("canvas"); // wait for the selector to load
-    const element = await page.$("canvas"); // declare a variable with an ElementHandle
+    await page.evaluate((chartData) => {
+      window.napchart.setDataCalcShapeAndDraw(chartData)
+    }, data.chartDocument.chartData);
     await element.screenshot({ path: __dirname + "chart.png" });
 
     // await browser.close();
