@@ -9,14 +9,14 @@ console.log('WEB_BASE: ', WEB_BASE);
 let page = false;
 let element = false;
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const pageHere = await browser.newPage();
   await pageHere.setViewport({
     width: 2500,
     height: 1500,
     deviceScaleFactor: 2,
   });
-  await pageHere.goto(`${WEB_BASE}/app`);
+  await pageHere.goto(`${WEB_BASE}/only-the-chart/uhJZRNUCN`);
   await pageHere.waitForSelector("canvas"); // wait for the selector to load
   const elementHere = await pageHere.$("canvas"); // declare a variable with an ElementHandle
   element = elementHere
