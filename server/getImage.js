@@ -9,7 +9,7 @@ console.log('WEB_BASE: ', WEB_BASE);
 let page = false;
 let element = false;
 (async () => {
-  const browser = await puppeteer.launch({ headless: isDev ? true : false });
+  const browser = await puppeteer.launch({ headless: isDev ? false : true });
   const pageHere = await browser.newPage();
   await pageHere.setViewport({
     width: 2500,
